@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:7-alpine
+    environment:
+      - REDIS_MAXCLIENTS=1000
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - REDIS_URL=redis://redis:6379/2
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 1024M
+
+  api:
+    image: python:3.10-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: python -u app/api.py
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/2
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+
+  flower:
+    image: mher/flower:latest
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:

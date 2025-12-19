@@ -1,0 +1,7 @@
+{
+  "python.analysis.extraPaths": [
+    "backend",
+    "backend/app"
+  ],
+  "python.pythonPath": "backend/venv/Scripts/python.exe"
+}
