@@ -13,6 +13,11 @@ email-validator>=2.1.0
 python-dotenv>=1.0.1
 
 # =========================
+# Forms / OAuth2
+# =========================
+python-multipart>=0.0.9
+
+# =========================
 # Database
 # =========================
 sqlmodel>=0.0.16
@@ -52,7 +57,6 @@ pytest-asyncio>=0.23.5
 httpx>=0.27.0
 fakeredis>=2.21.0
 pytest-mock>=3.14.0
-
 
 
 
