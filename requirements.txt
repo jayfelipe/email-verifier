@@ -13,6 +13,7 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
 email-validator==2.3.0
+pydantic==1.10.7
 
 # -------- Background Jobs --------
 celery==5.5.3
@@ -31,6 +32,7 @@ cachetools>=5.3.0
 # -------- Observability --------
 prometheus-client==0.16.0
 sentry-sdk==1.22.0
+
 
 
 
