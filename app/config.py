@@ -7,10 +7,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "supersecret"
     JWT_ALGORITHM: str = "HS256"
 
-    #DATABASE_URL: str = "postgresql+asyncpg://localhost:123@localhost:5432/db"
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:123@localhost:5432/db"
-
-
+    # 🚀 Railway la inyecta automáticamente
+    DATABASE_URL: str
 
     class Config:
         env_file = ".env"
