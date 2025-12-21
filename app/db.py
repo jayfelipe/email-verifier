@@ -1,14 +1,41 @@
 # backend/app/db.py
-from sqlmodel import SQLModel, create_engine
+import os
+from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from .config import settings
 
-engine = create_async_engine(settings.DATABASE_URL, echo=False, future=True)
-async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
+# 1️⃣ Tomamos la URL
+DATABASE_URL = settings.DATABASE_URL
+
+# 2️⃣ Convertimos a asyncpg si viene como postgresql://
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgresql://",
+        "postgresql+asyncpg://",
+        1
+    )
+
+# 3️⃣ Creamos engine con SSL obligatorio (Railway)
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=False,
+    pool_pre_ping=True,
+    connect_args={
+        "ssl": "require"
+    }
+)
+
+# 4️⃣ Session async
+async_session = sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
+
+# 5️⃣ Init DB
 async def init_db():
     async with engine.begin() as conn:
-        # crea tablas si no existen
         await conn.run_sync(SQLModel.metadata.create_all)
