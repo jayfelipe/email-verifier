@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "supersecret"
     JWT_ALGORITHM: str = "HS256"
 
-    # 🚀 Railway la inyecta automáticamente
     DATABASE_URL: str
+    API_KEY: str   
 
     class Config:
         env_file = ".env"
@@ -18,4 +18,5 @@ def get_settings():
     return Settings()
 
 settings = get_settings()
+
 
