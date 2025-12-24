@@ -1,12 +1,16 @@
 # app/security/api_key.py
-from fastapi import Request, HTTPException, status
+from fastapi import Depends, HTTPException, status
+from fastapi.security import APIKeyHeader
 from app.config import settings
 
-API_KEY_HEADER = "X-API-Key"
+API_KEY_NAME = "X-API-Key"
 
-async def verify_api_key(request: Request):
-    api_key = request.headers.get(API_KEY_HEADER)
+api_key_header = APIKeyHeader(
+    name=API_KEY_NAME,
+    auto_error=False
+)
 
+async def verify_api_key(api_key: str = Depends(api_key_header)):
     if not api_key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
