@@ -4,11 +4,8 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     APP_NAME: str = "Outbound Email Verifier"
-    JWT_SECRET: str = "supersecret"
-    JWT_ALGORITHM: str = "HS256"
-
     DATABASE_URL: str
-    API_KEY: str   
+    API_KEY: str
 
     class Config:
         env_file = ".env"
