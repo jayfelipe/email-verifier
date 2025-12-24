@@ -37,13 +37,8 @@ python-multipart==0.0.9
 # =========================
 # Background / Queues
 # =========================
-celery==5.5.3
 redis==4.5.5
 aioredis==2.0.1
-amqp==5.3.1
-billiard==4.2.4
-kombu==5.5.4
-vine==5.1.0
 
 # =========================
 # Email / Networking
@@ -53,6 +48,12 @@ aiohttp==3.13.2
 aiosmtplib==5.0.0
 anyio==4.12.0
 requests==2.31.0
+
+# =========================
+# HTML / Parsing (CRÍTICO PARA VERIFY ENGINE)
+# =========================
+beautifulsoup4==4.12.3
+lxml==5.1.0
 
 # =========================
 # Utils
@@ -84,6 +85,7 @@ pytest-asyncio==0.23.5
 pytest-mock==3.15.1
 fakeredis==2.32.1
 httpx==0.27.0
+
 
 
 
