@@ -1,5 +1,5 @@
 # backend/app/routers/jobs_router.py
-from fastapi import APIRouter, BackgroundTasks, Depends
+from fastapi import APIRouter, Depends
 import uuid
 
 from app.security.api_key import verify_api_key
@@ -10,26 +10,26 @@ from ..tasks import enqueue_job
 jobs_router = APIRouter(
     prefix="/jobs",
     tags=["jobs"],
-    dependencies=[Depends(verify_api_key)]  # 🔐 API KEY aplicada al router
+    dependencies=[Depends(verify_api_key)]  # 🔐 API KEY
 )
 
 @jobs_router.post("/", response_model=JobRead)
-async def create_job_endpoint(
-    job: JobCreate,
-    background_tasks: BackgroundTasks,
-):
-    # Usuario dummy por ahora
-    current_user = type("User", (), {"id": 1})()
-
+async def create_job_endpoint(job: JobCreate):
     job_id = str(uuid.uuid4())
 
+    # 🔹 SIN usuario hasta que exista auth real
     await create_job(
         job_id=job_id,
-        owner_id=current_user.id,
+        owner_id=None,
         total=len(job.emails)
     )
 
-    enqueue_job(job_id, current_user.id, job.emails)
+    # 🔹 Encolar job sin owner
+    enqueue_job(
+        job_id=job_id,
+        owner_id=None,
+        emails=job.emails
+    )
 
     return JobRead(
         job_id=job_id,
@@ -37,6 +37,7 @@ async def create_job_endpoint(
         total=len(job.emails),
         processed=0
     )
+
 
 
 
